@@ -1,4 +1,4 @@
-var  boy, backgroundIMG, ground, boyIMG, back,roof,obstaclesGroup,gameState, starGroup, i,count;
+var  boy, backgroundIMG, ground, boyIMG, back,roof,obstaclesGroup,gameState;
 
 function preload() {
     backgroundIMG=loadImage("Background.jpg")
@@ -16,18 +16,12 @@ function setup(){
     ground.visible=false;
     roof = createSprite(740,0,1500,10)
     obstaclesGroup=new Group();
-    starGroup=new Group();
-    count=0
-    gameState=0
 }
 
 function draw(){
     //background(backgroundIMG)
 
     if(gameState==0){
-        i=0
-        count = count + round(getFrameRate()/60 );
-        boy.visible=true;
         back.velocityX=2
         back.x=back.width/2
         ground.velocityX=3
@@ -39,9 +33,7 @@ function draw(){
         boy.velocityY=boy.velocityY+0.8
         boy.collide(ground);
         boy.bounceOff(roof);
-        
-        spawnObstacles();
-        spawnStars();
+
 
         if(obstaclesGroup.isTouching(boy)){
             gameState=1
@@ -59,26 +51,8 @@ function draw(){
         text("Game Over",740,500);
     }
 
-    if(boy.isTouching(starGroup)){
-        gameState=2
-    }
-
-    if(gameState==2){
-        boy.visible=false
-        back.velocityX=2
-        back.x=back.width/2
-        ground.velocityX=3
-        ground.x=ground.width/2
-        i++
-        if(i==500){
-            gameState=0
-        }
-    }
-
-    if(count % 1000 ==0 )
+    spawnObstacles();       
     drawSprites();
-    textSize(25)
-    text("Score: "+count,1300, 200)
 }
 
 function spawnObstacles(){
@@ -99,17 +73,3 @@ function spawnObstacles(){
     
 }
 
-function spawnStars(){
-    if(frameCount % 1000 === 0){
-        var star = createSprite(1550,500,50,50)
-        star.velocityX=random(-3,-8);
-        var starposition=Math.round(random(1,2))
-        if(starposition==1){
-            star.y=boy.y-Math.round(random(10,20))
-        }
-        if(starposition==2){
-            star.y=boy.y+Math.round(random(10,20))
-        }
-        starGroup.add(star);
-    }
-}
